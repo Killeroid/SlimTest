@@ -31,7 +31,7 @@ public class SlimTest {
 		}
 	}
 	
-	public void runTests() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void runTests() {
 		
 		for (int counter = 0; ;counter++) {
 			System.out.println("\n -----Starting Round " + counter + " of Tests-----\n");
@@ -44,8 +44,20 @@ public class SlimTest {
 				    if (methodName.equals(m.getName())) {
 				        // for static methods we can use null as instance of class
 				    	System.out.print("Tests." + methodName + "() ==>> ");
-				        boolean result = (Boolean) m.invoke(null, null);
-				        System.out.print(" : " + result + "\n");
+						try {
+							boolean result;
+							result = (Boolean) m.invoke(null, null);
+							System.out.print(" : " + result + "\n");
+						} catch (IllegalAccessException e) {
+							System.out.print(" : FAILED\n");
+							e.printStackTrace();
+						} catch (IllegalArgumentException e) {
+							System.out.print(" : FAILED\n");
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							System.out.print(" : FAILED\n");
+							e.printStackTrace();
+						}
 				        break;
 				    }
 				}
@@ -60,28 +72,61 @@ public class SlimTest {
 				} catch (IOException e) {
 					e.printStackTrace();
 				} 
-			}
-			
+			}	
 		}
-		
-		
+	}
+	
+	public void runTests(int numCases) {
+		Random random = new Random();
+		Method[] methods = Tests.class.getMethods();
+		for (int counter = 0; ;counter++) {
+			System.out.println("\n -----Starting Round " + counter + " of Tests-----\n");
+			long startTime = System.currentTimeMillis();
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+			
+			for (int i = 0; i < numCases; i++ ) {
+				String methodName = "A" + random.nextInt(19);;
+				
+				for (Method m : methods) {
+				    if (methodName.equals(m.getName())) {
+				        // for static methods we can use null as instance of class
+				    	System.out.print("Tests." + methodName + "() ==>> ");
+						try {
+							boolean result;
+							result = (Boolean) m.invoke(null, null);
+							System.out.print(" : " + result + "\n");
+						} catch (Exception e) {
+							System.out.print(" : FAILED ***************\n");
+							e.printStackTrace();
+						} 
+				        break;
+				    } 
+				}
+				
+			}
+			while ((System.currentTimeMillis() - startTime) < (3 * 1000)) {
+				try {
+					if (in.ready()) {
+						System.out.println("\nExiting Application");
+						System.exit(0);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} 
+			}	
+		}
 	}
 	
 	public static void main(String[] args) {
-		System.out.println("Starting SLimCollection Tests\n");
+		System.out.println("Starting SlimCollection Tests\n");
 		String nameOfRunningVM = ManagementFactory.getRuntimeMXBean().getName();
 		int p = nameOfRunningVM.indexOf('@');
 		System.out.println("Starting SlimTest as PID: " + nameOfRunningVM.substring(0, p));
 		try {
 			SlimTest testor = new SlimTest();
-			testor.runTests();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			testor.runTests(5);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
