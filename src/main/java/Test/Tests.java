@@ -6,32 +6,8 @@ import java.util.Random;
 
 import SlimCollection.*;
 
-import org.junit.*;
-
 
 public class Tests {
-
-	public static boolean correct(String retType, Object a, Object b) {
-		
-
-		try {
-			if (retType.equalsIgnoreCase("int")) {
-
-			} else if (retType.equalsIgnoreCase("boolean")) {
-
-			} else if (retType.equalsIgnoreCase("Object")) {
-				//Assert.assertArrayEquals(a, b);
-			} else if (retType.equalsIgnoreCase("List")) {
-
-			} else {
-
-			}
-			//Assert.assertNotNull();
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
 
 	//add
 	public static boolean A0() {
@@ -42,16 +18,6 @@ public class Tests {
 		try {
 			int randNum = random.nextInt(30);
 			b.add(randNum);
-//			for (int i = 0; i < 40; i ++) {
-//				int randNum = random.nextInt(30);
-//				b.add(randNum);
-//				//Assert.assertEquals(a, b);
-//				//Assert.assertEquals(a.add(randNum), b.add(randNum)); //add
-//				//Assert.assertEquals(a.contains(randNum), b.contains(randNum)); //contains
-//				//Assert.assertEquals(a.size(), b.size()); //size
-//				//Assert.assertEquals(a.isEmpty(), b.isEmpty());  //isEmpty
-//				//Assert.assertArrayEquals(a.toArray(), b.getColl().toArray()); //getcoll
-//			}
 			return true;
 		} catch (Exception e) {
 			return false;

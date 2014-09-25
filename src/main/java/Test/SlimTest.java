@@ -9,13 +9,12 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 public class SlimTest {
-	
-	
+
+
 	private int minTests = 1;
 	private String[] cases;
-	private Boolean[] results;
-	
-	
+
+
 	public SlimTest() {
 		Random random = new Random();
 		int randNum = 0;
@@ -23,30 +22,28 @@ public class SlimTest {
 			//randNum = random.nextInt(19);
 			randNum = 5;
 		} while (randNum < minTests) ;
-		
+
 		this.cases = new String[5];
-		this.results = new Boolean[5];
 		for (int i = 0; i < 5; i++ ) {
 			this.cases[i] =  "A" + random.nextInt(19);
 		}
 	}
-	
+
 	public void runTests() {
-		
+		Method[] methods = Tests.class.getMethods();
 		for (int counter = 0; ;counter++) {
 			System.out.println("\n -----Starting Round " + counter + " of Tests-----\n");
 			long startTime = System.currentTimeMillis();
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			for (int i = 0; i < this.cases.length; i++ ) {
 				String methodName = this.cases[i];
-				Method[] methods = Tests.class.getMethods();
+
 				for (Method m : methods) {
-				    if (methodName.equals(m.getName())) {
-				        // for static methods we can use null as instance of class
-				    	System.out.print("Tests." + methodName + "() ==>> ");
+					if (methodName.equals(m.getName())) {
+						System.out.print("Tests." + methodName + "() ==>> ");
 						try {
 							boolean result;
-							result = (Boolean) m.invoke(null, null);
+							result = (Boolean) m.invoke(Tests.class, new Object[] {});
 							System.out.print(" : " + result + "\n");
 						} catch (IllegalAccessException e) {
 							System.out.print(" : FAILED\n");
@@ -58,10 +55,10 @@ public class SlimTest {
 							System.out.print(" : FAILED\n");
 							e.printStackTrace();
 						}
-				        break;
-				    }
+						break;
+					}
 				}
-				
+
 			}
 			while ((System.currentTimeMillis() - startTime) < (3 * 1000)) {
 				try {
@@ -75,35 +72,42 @@ public class SlimTest {
 			}	
 		}
 	}
-	
+
 	public void runTests(int numCases) {
 		Random random = new Random();
-		Method[] methods = Tests.class.getMethods();
 		for (int counter = 0; ;counter++) {
 			System.out.println("\n -----Starting Round " + counter + " of Tests-----\n");
 			long startTime = System.currentTimeMillis();
-			
+
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			
+
 			for (int i = 0; i < numCases; i++ ) {
 				String methodName = "A" + random.nextInt(19);;
-				
-				for (Method m : methods) {
-				    if (methodName.equals(m.getName())) {
-				        // for static methods we can use null as instance of class
-				    	System.out.print("Tests." + methodName + "() ==>> ");
-						try {
-							boolean result;
-							result = (Boolean) m.invoke(null, null);
-							System.out.print(" : " + result + "\n");
-						} catch (Exception e) {
-							System.out.print(" : FAILED ***************\n");
-							e.printStackTrace();
-						} 
-				        break;
-				    } 
+
+				System.out.print("Tests." + methodName + "() ==>> ");
+				try {
+					Method m2 = Tests.class.getDeclaredMethod(methodName, new Class<?>[] {});
+					boolean result;
+					result = (Boolean) m2.invoke(Tests.class, new Object[] {});
+					System.out.print(" : " + result + "\n");
+				} catch (NoSuchMethodException e1) {
+					System.out.print(" : FAILED ***************\n");
+					//e.printStackTrace();
+				} 
+				//break;
+				catch (IllegalAccessException e) {
+					System.out.print(" : FAILED ***************\n");
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					System.out.print(" : FAILED ***************\n");
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					System.out.print(" : FAILED ***************\n");
+					e.printStackTrace();
 				}
-				
+
+
+
 			}
 			while ((System.currentTimeMillis() - startTime) < (3 * 1000)) {
 				try {
@@ -117,7 +121,7 @@ public class SlimTest {
 			}	
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println("Starting SlimCollection Tests\n");
 		String nameOfRunningVM = ManagementFactory.getRuntimeMXBean().getName();
@@ -131,5 +135,5 @@ public class SlimTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

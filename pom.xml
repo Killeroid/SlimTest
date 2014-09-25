@@ -6,15 +6,8 @@
 	<artifactId>SlimTest</artifactId>
 	<version>0.0.1</version>
 	<name>SlimTest</name>
-	<description>Test Program for EvoSlim</description>
+	<description>Test Program for Evo Slimming</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>
